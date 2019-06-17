@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#if defined(__ANDROID__) && !defined(WCDB_ICU_DIRECT_LINKING)
+#if !defined(WCDB_ICU_DIRECT_LINKING)
 
 #define ICUCOMPAT_IMPL
 
@@ -131,4 +131,4 @@ void destroy_icucompat()
     s_libicui18n_so = NULL;
 }
 
-#endif // defined(__ANDROID__) && !defined(WCDB_ICU_DIRECT_LINKING)
+#endif // !defined(WCDB_ICU_DIRECT_LINKING)

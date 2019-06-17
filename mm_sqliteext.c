@@ -22,7 +22,7 @@
 SQLITE_EXTENSION_INIT1
 
 #include "mm_fts.h"
-#include "icucompat.h"
+#include <icucompat.h>
 
 const static uint8_t g_default_key[16] = {0x8e, 0x65, 0xd8, 0x50, 0x1f, 0x94,
                                           0x06, 0x22, 0xfa, 0x45, 0x68, 0xb6,

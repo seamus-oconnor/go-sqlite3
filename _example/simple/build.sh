@@ -1,3 +1,3 @@
 #!/bin/bash
 
-CGO_ENABLED=1 GOARCH=amd64 GOOS=linux CGO_CFLAGS="-DSQLITE_OMIT_LOAD_EXTENSION" go build  -ldflags "-linkmode external -extldflags -static" -a -v --tags "linux sqlite_omit_load_extension sqlite_vtable sqlite_fts5 sqlite_icu" && ldd simple
+CGO_ENABLED=1 go build -a -x -v --tags "sqlite_omit_load_extension sqlite_vtable sqlite_fts5 sqlite_icu" && ldd simple

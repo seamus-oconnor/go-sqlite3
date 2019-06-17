@@ -20,14 +20,14 @@
 
 #include "fts3_tokenizer.h"
 #include "mm_fts.h"
-#include "icucompat.h"
+#include <icucompat.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "unicode/ubrk.h"
-#include "unicode/unorm.h"
-#include "unicode/utf16.h"
-#include "unicode/utf8.h"
+#include <unicode/ubrk.h>
+#include <unicode/unorm.h>
+#include <unicode/utf16.h>
+#include <unicode/utf8.h>
 
 
 #ifdef _WIN32

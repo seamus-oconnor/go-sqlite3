@@ -3,11 +3,11 @@ go-sqlite3
 
 [![GoDoc Reference](https://godoc.org/github.com/mattn/go-sqlite3?status.svg)](http://godoc.org/github.com/mattn/go-sqlite3)
 [![Build Status](https://travis-ci.org/mattn/go-sqlite3.svg?branch=master)](https://travis-ci.org/mattn/go-sqlite3)
-[![Financial Contributors on Open Collective](https://opencollective.com/mattn-go-sqlite3/all/badge.svg?label=financial+contributors)](https://opencollective.com/mattn-go-sqlite3) 
+[![Financial Contributors on Open Collective](https://opencollective.com/mattn-go-sqlite3/all/badge.svg?label=financial+contributors)](https://opencollective.com/mattn-go-sqlite3)
 [![Coverage Status](https://coveralls.io/repos/mattn/go-sqlite3/badge.svg?branch=master)](https://coveralls.io/r/mattn/go-sqlite3?branch=master)
 [![Go Report Card](https://goreportcard.com/badge/github.com/mattn/go-sqlite3)](https://goreportcard.com/report/github.com/mattn/go-sqlite3)
 
-NOTE: v2.0.1 or higher is unfortunatal release. So there are no big changes. And does not provide v2 feature.
+NOTE: v2.0.1 or higher is unfortunate release. So there are no big changes. And does not provide v2 feature.
 
 # Description
 
@@ -23,6 +23,7 @@ Supported Golang version: See .travis.yml
 - [Description](#description)
     - [Overview](#overview)
 - [Installation](#installation)
+- [Encryption](#encryption)
 - [API Reference](#api-reference)
 - [Connection String](#connection-string)
   - [DSN Examples](#dsn-examples)
@@ -71,6 +72,29 @@ If you want to build your app using go-sqlite3, you need gcc.
 However, after you have built and installed _go-sqlite3_ with `go install github.com/mattn/go-sqlite3` (which requires gcc), you can build your app without relying on gcc in future.
 
 ***Important: because this is a `CGO` enabled package you are required to set the environment variable `CGO_ENABLED=1` and have a `gcc` compile present within your path.***
+
+# Encryption
+
+Adds [sqlcipher](https://github.com/sqlcipher/sqlcipher) to go-sqlite3. Follow the instructions below, the cipher extension will be builtin by default.
+
+For easy building, [libtomcrypt](https://github.com/libtom/libtomcrypt) and related files are in the project.
+
+You have 2 ways to enable encryption:
+
+### DSN
+
+    1. You can try DSN like this, `sql.Open("sqlite3", "file:dbFileName?_crypto_key=abc123")`
+
+### PRAGMA
+
+    1. After Open db, before execute any statement do `db.Exec("PRAGMA key = abc123;")`
+
+Thanks for the great works of [sqlcipher](https://github.com/sqlcipher/sqlcipher), [libtomcrypt](https://github.com/libtom/libtomcrypt) and [go-sqlite3](https://github.com/mattn/go-sqlite3)
+
+For more details:
+1. https://github.com/sqlcipher/sqlcipher
+1. https://github.com/libtom/libtomcrypt
+1. https://github.com/mattn/go-sqlite3
 
 # API Reference
 
@@ -162,7 +186,7 @@ go build --tags "icu json1 fts5 secure_delete"
 | Allow URI Authority | sqlite_allow_uri_authority | URI filenames normally throws an error if the authority section is not either empty or "localhost".<br><br>However, if SQLite is compiled with the SQLITE_ALLOW_URI_AUTHORITY compile-time option, then the URI is converted into a Uniform Naming Convention (UNC) filename and passed down to the underlying operating system that way |
 | App Armor | sqlite_app_armor | When defined, this C-preprocessor macro activates extra code that attempts to detect misuse of the SQLite API, such as passing in NULL pointers to required parameters or using objects after they have been destroyed. <br><br>App Armor is not available under `Windows`. |
 | Disable Load Extensions | sqlite_omit_load_extension | Loading of external extensions is enabled by default.<br><br>To disable extension loading add the build tag `sqlite_omit_load_extension`. |
-| Foreign Keys | sqlite_foreign_keys | This macro determines whether enforcement of foreign key constraints is enabled or disabled by default for new database connections.<br><br>Each database connection can always turn enforcement of foreign key constraints on and off and run-time using the foreign_keys pragma.<br><br>Enforcement of foreign key constraints is normally off by default, but if this compile-time parameter is set to 1, enforcement of foreign key constraints will be on by default | 
+| Foreign Keys | sqlite_foreign_keys | This macro determines whether enforcement of foreign key constraints is enabled or disabled by default for new database connections.<br><br>Each database connection can always turn enforcement of foreign key constraints on and off and run-time using the foreign_keys pragma.<br><br>Enforcement of foreign key constraints is normally off by default, but if this compile-time parameter is set to 1, enforcement of foreign key constraints will be on by default |
 | Full Auto Vacuum | sqlite_vacuum_full | Set the default auto vacuum to full |
 | Incremental Auto Vacuum | sqlite_vacuum_incr | Set the default auto vacuum to incremental |
 | Full Text Search Engine | sqlite_fts5 | When this option is defined in the amalgamation, versions 5 of the full-text search engine (fts5) is added to the build automatically |
@@ -199,7 +223,7 @@ To compile for `ARM` use the following environment.
 ```bash
 env CC=arm-linux-gnueabihf-gcc CXX=arm-linux-gnueabihf-g++ \
     CGO_ENABLED=1 GOOS=linux GOARCH=arm GOARM=7 \
-    go build -v 
+    go build -v
 ```
 
 Additional information:
@@ -492,9 +516,9 @@ For an example see [dinedal/go-sqlite3-extension-functions](https://github.com/d
     specified `":memory:"`, that connection will see a brand new database. A
     workaround is to use `"file::memory:?cache=shared"` (or `"file:foobar?mode=memory&cache=shared"`). Every
     connection to this string will point to the same in-memory database.
-    
+
     Note that if the last database connection in the pool closes, the in-memory database is deleted. Make sure the [max idle connection limit](https://golang.org/pkg/database/sql/#DB.SetMaxIdleConns) is > 0, and the [connection lifetime](https://golang.org/pkg/database/sql/#DB.SetConnMaxLifetime) is infinite.
-    
+
     For more information see
     * [#204](https://github.com/mattn/go-sqlite3/issues/204)
     * [#511](https://github.com/mattn/go-sqlite3/issues/511)
@@ -528,7 +552,7 @@ For an example see [dinedal/go-sqlite3-extension-functions](https://github.com/d
     ```
 
     Second please set the database connections of the SQL package to 1.
-    
+
     ```go
     db.SetMaxOpenConns(1)
     ```

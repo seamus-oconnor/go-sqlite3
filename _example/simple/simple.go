@@ -18,6 +18,7 @@ func main() {
 	defer db.Close()
 
 	sqlStmt := `
+	PRAGMA key = auxten;
 	create table foo (id integer not null primary key, name text);
 	delete from foo;
 	`
